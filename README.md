@@ -1,0 +1,1 @@
+# ApplicationDeLectureQrCode
