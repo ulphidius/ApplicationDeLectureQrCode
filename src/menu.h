@@ -10,7 +10,12 @@
 #include "createXml.h"
 
 
-void inputXml();
-void outputXml();
+void inputXml(Profile *);
+void inputConfig(Data *);
+void outputXml(Profile *);
+void mainProccessUser(Profile *);
+void mainProccessAdmin(Data *);
+void menuUser();
+void menuAdmin();
 
 #endif /* SRC_MENU_H_ */

@@ -75,6 +75,7 @@ xmlNodePtr addNode(){
 void addProp(Profile * profile, xmlNodePtr node, char * value){
 	if(xmlNewProp(node, BAD_CAST "id", BAD_CAST profile->id) == NULL ||
 	   xmlNewProp(node, BAD_CAST "email", BAD_CAST profile->email) == NULL ||
+	   xmlNewProp(node, BAD_CAST "time", BAD_CAST profile->time) == NULL ||
 	   xmlNewProp(node, BAD_CAST "check", BAD_CAST value) == NULL){
 		printf("Erreur à l'ajout des propriétés ! \n");
 		return;
@@ -100,6 +101,7 @@ void addUser(Profile * profile, int inOut){
 	doc = openXmlFile(filename);
 	root_node = getRootNode(doc);
 	node = addNode();
+	generateTime(profile->time);
 
 	if(inOut > 0){
 		addProp(profile, node, IN);
@@ -120,6 +122,7 @@ void addUser(Profile * profile, int inOut){
 void showProfile(Profile * profile){
 	printf("%s\n", profile->id == NULL ? "(null)" : profile->id);
 	printf("%s\n", profile->email == NULL ? "(null)" : profile->email);
+	printf("%s\n", profile->time == NULL ?"(null)" : profile->time);
 	printf("%s\n", profile->statut == NULL ? "(null)" : profile->statut);
 
 }
@@ -146,11 +149,21 @@ Profile * initProfile(){
 		free(profile);
 		return NULL;
 	}
+
+	profile->time = malloc(6 * 1);
+	if(profile->time == NULL){
+		free(profile->email);
+		free(profile->id);
+		free(profile);
+		return NULL;
+	}
+
 	profile->statut = malloc(4 * 1);
 	if(profile->statut == NULL){
 		printf("Erreur allocation ");
 		free(profile->email);
 		free(profile->id);
+		free(profile->time);
 		free(profile);
 		return NULL;
 	}
@@ -170,6 +183,8 @@ void freeProfile(Profile * profile){
 		free(profile->email);
 	if(profile->statut != NULL)
 		free(profile->statut);
+	if(profile->time != NULL)
+		free(profile->time);
 
 }
 
@@ -184,9 +199,31 @@ char * generateFileName(){
 	char * year = NULL;
 
 	filename = malloc(250 * 1);
+	if(filename == NULL){
+		printf("Erreur à l'allocation de filename ! \n");
+		return NULL;
+	}
 	day = malloc(3 * 1);
+	if(day == NULL){
+		printf("Erreur à l'allocation de day ! \n");
+		free(filename);
+		return NULL;
+	}
 	month = malloc(3 * 1);
+	if(month == NULL){
+		printf("Erreur à l'allocation de mouth ! \n");
+		free(filename);
+		free(day);
+		return NULL;
+	}
 	year = malloc(5 * 1);
+	if(year == NULL){
+		printf("Erreur à l'allocation de year ! \n");
+		free(filename);
+		free(day);
+		free(month);
+		return NULL;
+	}
 
 	checkProfileDirectoryExist();
 	data = parseFileConfig(CONFIG);
@@ -199,6 +236,9 @@ char * generateFileName(){
 
 	strcpy(filename, PROFILE_FILENAME_START);
 	strcat(filename, data->name);
+	if(strlen(day) == 1){
+		strcat(filename, "0");
+	}
 	strcat(filename, day);
 	if(strlen(month) == 1){
 		strcat(filename, "0");
@@ -214,6 +254,38 @@ char * generateFileName(){
 	free(year);
 
 	return filename;
+}
+
+// Génération des heures d'entrés et sorties
+void generateTime(char * timeFinal){
+	char * hour = NULL;
+	char * min = NULL;
+	time_t secondes;
+	struct tm instant;
+
+	hour = malloc(3 * 1);
+	if(hour == NULL){
+		printf("Erreur à l'allocation de la chaine hour a échoué ! \n");
+		return;
+	}
+	min = malloc(3 * 1);
+	if(min == NULL){
+		printf("Erreur à l'allocation de la chaine min a échoué ! \n");
+		free(hour);
+		return;
+	}
+
+	time(&secondes);
+	instant=*localtime(&secondes);
+
+	sprintf(hour, "%d", instant.tm_hour);
+	sprintf(min, "%d", instant.tm_min);
+	strcpy(timeFinal, hour);
+	strcat(timeFinal, ":");
+	strcat(timeFinal, min);
+
+	free(hour);
+	free(min);
 }
 
 // Fonction de verification de l'existance du dossier

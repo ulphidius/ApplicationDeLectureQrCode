@@ -25,6 +25,7 @@
 typedef struct Profile{
 	char * id;
 	char * email;
+	char * time;
 	char * statut;
 }Profile;
 
@@ -37,7 +38,9 @@ void addProp(Profile *, xmlNodePtr, char *);
 void addProp(Profile *, xmlNodePtr, char *);
 void checkProfileDirectoryExist();
 void checkFileExist();
+void generateTime(char *);
 char * generateFileName();
+
 
 xmlDocPtr openXmlFile(char *);
 xmlNodePtr getRootNode(xmlDocPtr);

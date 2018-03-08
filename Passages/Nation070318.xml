@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Passage>
+  <User id="1" email="test1@gmail.com" check="in"/>
+<User id="2" email="test2@gmail.com" check="in"/><User id="3" email="test3@gmail.com" check="in"/><User id="4" email="test4@gmail.com" check="in"/><User id="5" email="" check="out"/><User id="6" email="test6@gmail.com" check="in"/><User id="7" email="test7@gmail.com" check="in"/><User id="8" email="" check="in"/><User id="9" email="test9@gmail.com" check="in"/><User id="10" email="test10@gmail.com" check="in"/><User id="11" email="test11@gmail.com" check="out"/></Passage>

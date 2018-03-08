@@ -39,5 +39,6 @@
 	#define FILE_SEPARATOR '/'
 	#define FILE_SEPARATOR_STR "/"
 #endif
+#define CLEAR_STDIN { int c; while((c = getchar()) && (c != '\n')); }
 
 #endif /* LIBRARY_H_ */

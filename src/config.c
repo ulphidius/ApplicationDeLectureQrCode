@@ -44,7 +44,7 @@ Data * initData(){
 		free(data);
 		return NULL;
 	}
-	data->ip = malloc(sizeof(char) * 16);
+	data->ip = malloc(sizeof(char) * 17);
 	if(data->ip == NULL){
 		printf("Erreur allocation ip ! \n");
 		free(data->name);
